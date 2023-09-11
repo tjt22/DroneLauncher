@@ -6,12 +6,14 @@ BLEService ledService("19B10000-E8F2-537E-4F6C-D104768A1214"); // Bluetooth® Lo
 BLEByteCharacteristic switchCharacteristic("19B10001-E8F2-537E-4F6C-D104768A1214", BLERead | BLEWrite);
  
 const int transistorPin = D0; // change based on where launcher is plugged in
+const int ledPin = LED_BUILTIN 
  
 void setup() {
   Serial.begin(9600);
  
   // set LED pin to output mode
   pinMode(transistorPin, OUTPUT);
+  pinMode(ledPin, OUTPUT);
  
   // begin initialization
   if (!BLE.begin()) {
@@ -54,9 +56,11 @@ void loop() {
         if (switchCharacteristic.written()) {
           if (switchCharacteristic.value()) {   
             digitalWrite(transistorPin, LOW); // changed from HIGH to LOW   
+            digitalWrite(ledPin, LOW);
   
           } else {                              
             digitalWrite(transistorPin, HIGH); // changed from LOW to HIGH
+            digitalWrite(ledPin, HIGH);
             // optional:
             // delay(4)
             // digitalWrite(transistorPin, LOW);       
