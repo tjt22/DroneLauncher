@@ -19,9 +19,9 @@ async def toggle_characteristic(client):
     # Write the new value to the characteristic
     await client.write_gatt_char(characteristic_uuid, value.to_bytes(1, "big"))
     if (value == 1):
-        print("launcher activated")
-    elif (value == 0):
         print("launcher deactivated")
+    elif (value == 0):
+        print("launcher activated")
 
 
 
