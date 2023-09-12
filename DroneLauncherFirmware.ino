@@ -56,11 +56,11 @@ void loop() {
         if (switchCharacteristic.written()) {
           if (switchCharacteristic.value()) {   
             digitalWrite(transistorPin, LOW); // changed from HIGH to LOW   
-            digitalWrite(ledPin, LOW);
+            digitalWrite(ledPin, HIGH);
   
           } else {                              
             digitalWrite(transistorPin, HIGH); // changed from LOW to HIGH
-            digitalWrite(ledPin, HIGH);
+            digitalWrite(ledPin, LOW);
             // optional:
             // delay(4)
             // digitalWrite(transistorPin, LOW);       
