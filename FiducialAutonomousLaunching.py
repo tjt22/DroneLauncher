@@ -13,6 +13,11 @@ characteristic_uuid = "19B10001-E8F2-537E-4F6C-D104768A1214"  # Replace with you
 # Initialize the BLE client
 client = None
 
+async def set_characteristic_to_one(client):
+    # Set the characteristic value to 1
+    await client.write_gatt_char(characteristic_uuid, (1).to_bytes(1, "big"))
+    print("Characteristic set to 1")
+
 async def toggle_characteristic(client):
     # Get the current value of the characteristic
     characteristic = await client.read_gatt_char(characteristic_uuid)
@@ -58,13 +63,16 @@ async def main():
     connected = await check_bluetooth_connection()
 
     if connected:
+        # Ensure the characteristic is set to 1 before takeoff
+        await set_characteristic_to_one(client)
+
         # Initialize Tello
         drone = Tello()
         drone.connect()
         print(f"Battery: {drone.query_battery()}%")
         drone.streamon()
-        drone.takeoff()
         time.sleep(2)
+        drone.takeoff()
 
         # Register a spacebar keypress event to call the toggle_characteristic function
         keyboard.add_hotkey("space", lambda: asyncio.run(toggle_characteristic(client)))
@@ -118,6 +126,7 @@ async def main():
                             drone.emergency()  # Land the drone
                             time.sleep(2)  # Delay after landing command
                             await toggle_characteristic(client)  # Update BLE characteristic
+                            drone.end()
                             break  # Exit the loop after landing
                         else:
                             action_text = "Centering marker before landing"
